@@ -1,3 +1,5 @@
+# Range format is described under "A1 notation" here: https://developers.google.com/sheets/api/guides/concepts
+
 #-
 #  outputFilename: georgia_data.csv
 #  sheetId: 1rumw5gXUbTGLU4fMrftfIYiMrtBeH2FGnXludd6SwZ8
@@ -5,8 +7,8 @@
 -
   outputFilename: georgia_ev_automotive.csv
   sheetId: 1OX8TsLby-Ddn8WHa7yLKNpEERYN_RlScMrC0sbnT1Zs
-  range: "Automotive!A1:E"
+  range: "Automotive"
 -
   outputFilename: georgia_ev_repair.csv
   sheetId: 1OX8TsLby-Ddn8WHa7yLKNpEERYN_RlScMrC0sbnT1Zs
-  range: "Repair!A1:E"
+  range: "Repair"
