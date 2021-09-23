@@ -1,27 +1,19 @@
 import csv
-import argparse
+import os
 import yaml
 from googleapiclient.discovery import build
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
 # Manually paste in a personal API key here if you want to test locally
-# API_KEY_OVERRIDE = "keeeeeeeyyyyyy"
+API_KEY_OVERRIDE = None
 
 SAMPLE_SPREADSHEET_ID = '1OX8TsLby-Ddn8WHa7yLKNpEERYN_RlScMrC0sbnT1Zs'
 SAMPLE_RANGE_NAME = 'Automotive!A1:E'
 
 if __name__ == '__main__':
-    # Parse out arguments
-    parser = argparse.ArgumentParser(description='Scrape Google Sheets and output CSV files')
-    parser.add_argument('--api-key', help='The Google API key to use in scraping')
-    args = parser.parse_args()
-
-    apiKey = API_KEY_OVERRIDE if API_KEY_OVERRIDE else args.api_key
+    apiKey = API_KEY_OVERRIDE if API_KEY_OVERRIDE else os.environ.get('GOOGLE_API_KEY')
 
     if apiKey is None:
-        raise RuntimeError(f"Missing required arg 'api_key'")
+        raise RuntimeError(f"Missing required env var GOOGLE_API_KEY")
 
     # Build the Google Sheets API interface
     sheetConfigs = yaml.load(open('config/sheets.yaml', 'r'), Loader=yaml.FullLoader)
