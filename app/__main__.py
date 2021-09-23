@@ -16,7 +16,7 @@ if __name__ == '__main__':
         raise RuntimeError(f"Missing required env var GOOGLE_API_KEY")
 
     # Build the Google Sheets API interface
-    sheetConfigs = yaml.load(open('config/sheets.yaml', 'r'), Loader=yaml.FullLoader)
+    sheetConfigs = yaml.load(open('app/config/sheets.yaml', 'r'), Loader=yaml.FullLoader)
     apiService = build('sheets', 'v4', developerKey=apiKey)
     sheetInterface = apiService.spreadsheets()
 
