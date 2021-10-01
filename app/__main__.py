@@ -6,9 +6,6 @@ from googleapiclient.discovery import build
 # Manually paste in a personal API key here if you want to test locally
 API_KEY_OVERRIDE = None
 
-SAMPLE_SPREADSHEET_ID = '1OX8TsLby-Ddn8WHa7yLKNpEERYN_RlScMrC0sbnT1Zs'
-SAMPLE_RANGE_NAME = 'Automotive!A1:E'
-
 if __name__ == '__main__':
     apiKey = API_KEY_OVERRIDE if API_KEY_OVERRIDE else os.environ.get('GOOGLE_API_KEY')
 
@@ -30,13 +27,13 @@ if __name__ == '__main__':
         if outputFilename is None:
             raise RuntimeError(f"Missing outputFilename for sheet config with sheetId {sheetId}")
 
-        range = sheetConfig['range']
-        if range is None:
+        cellRange = sheetConfig['range']
+        if cellRange is None:
             raise RuntimeError(f"Missing range for sheet config with sheetId {sheetId}")
 
         # Call the Sheets API to get the actual values
         result = sheetInterface.values().get(spreadsheetId=sheetId,
-                                             range=range).execute()
+                                             range=cellRange).execute()
         values = result.get('values', [])
 
         if not values:
@@ -44,7 +41,7 @@ if __name__ == '__main__':
             continue
 
         # Open CSV file for writing
-        with open(sheetConfig['outputFilename'], 'w', newline='') as csvFile:
+        with open(f"output/{sheetConfig['outputFilename']}", 'w', newline='') as csvFile:
             # Using the Unix dialect for now because it seems the most reasonable. Can switch to Excel if it makes
             #   more sense for whomever is using this output.
             writer = csv.writer(csvFile, dialect='unix')

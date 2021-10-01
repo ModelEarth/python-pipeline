@@ -11,22 +11,45 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
-    - name: Run script
-      env:
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_KEY_GEORGIADATA }}
-      run: |
-        python -m app
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+      - name: Run Google Sheets scraper script
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_KEY_GEORGIADATA }}
+        run: |
+          python -m app
+      - name: Commit changed CSV files to Github
+        uses: EndBug/add-and-commit@v7.4.0
+        with:
+          # Add all changed CSV output files to the git index
+          add: 'output/*.csv'
+
+          author_name: modelearth
+#          author_email: mail@example.com
+
+          message: 'Update CSVs from Google Sheets'
+
+          # The way the action should handle pathspec errors from the add and remove commands. Three options are available:
+          # - ignore -> errors will be logged but the step won't fail
+          # - exitImmediately -> the action will stop right away, and the step will fail
+          # - exitAtEnd -> the action will go on, every pathspec error will be logged at the end, the step will fail.
+          # Default: ignore
+          pathspec_error_handling: exitImmediately
+
+          # Arguments for the git pull command. Use NO-PULL to avoid the action pulling at all.
+          # Default: '--no-rebase'
+#          pull: 'NO-PULL or --rebase --autostash ...'
+
+          # Whether to push the commit and, if any, its tags to the repo. It can also be used to set the git push arguments (see the paragraph below for more info)
+          # Default: true
+#          push: false
