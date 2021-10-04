@@ -8,8 +8,6 @@ on:
     paths-ignore:
       # Don't trigger the workflow on changes the workflow can cause
       - '**.csv'
-  pull_request:
-    branches: [ main ]
   schedule:
     # Run every morning at 4 AM UTC
     - cron: '0 4 * * *'
